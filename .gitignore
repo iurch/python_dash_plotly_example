@@ -1,6 +1,7 @@
 .vscode/
 assets/
-data/
+data/time**
+data/data.**
 env/
 **/[__]*
 

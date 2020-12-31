@@ -1,23 +1,14 @@
+#imports
+import os
 
-def covid_ts(pd,URL):
-    _covid_ts= pd.read_csv(URL)
-    return _covid_ts
-    #return 'Not any more COVID-19'
+# read the file for pd and return ds
+def read_file_csv(pd,URL,header):
+    _ds= pd.read_csv(os.path.join(os.path.dirname(__file__),URL),skiprows=[0],error_bad_lines=False,header=None,delim_whitespace=True,names=header)
+    return _ds
 
-#get data in cleaned time series format for country
+#get data in cleaned time series format for op
 #Return data frame
-def process_data(pd,data,cntry='US',window=3):
-    conf_ts= data
-    conf_ts_cntry= conf_ts[conf_ts['Country/Region']==cntry]
-    final_dataset= conf_ts_cntry.T[4:].sum(axis='columns').diff().rolling(window=window).mean()[40:]
-    df= pd.DataFrame(final_dataset,columns=['Total'])
+def process_data(pd,data,op='miliseconds'):
+    conf_ts= data[op].copy()
+    df= pd.DataFrame(conf_ts,columns=[op])
     return df
-
-#get overall wordlwide total for confirmed, recovered and dead cases
-def get_overall_total(df):
-    return df.iloc[:,-1].sum()
-
-#get total for confirmed, recovered and dead for country
-def get_cntry_total(df,cntry='US'):
-    return df[df['Country/Region']==cntry].iloc[:, -1].sum()
-
